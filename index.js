@@ -100,4 +100,5 @@ var jssdk = {
     };
   }
 };
+module.exports = jssdk;
 
