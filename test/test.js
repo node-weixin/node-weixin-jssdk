@@ -14,8 +14,6 @@ describe('node-weixin-jssdk node module', function () {
       token: process.env.APP_TOKEN
     };
 
-    console.log(app);
-
     var url = 'http://wx.t1bao.com/pay';
     config.app.init(app);
     nodeWeixinJssdk.prepare(config.app, url, function(error, data) {
