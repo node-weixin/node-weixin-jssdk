@@ -88,7 +88,7 @@ var jssdk = {
     return sha1.digest('hex');
   },
   generate: function (ticket, url) {
-    var timestamp = String(new Date().getTime());
+    var timestamp = String((new Date().getTime() / 1000).toFixed(0));
     var sha1 = crypto.createHash('sha1');
     sha1.update(timestamp);
     var noncestr = sha1.digest('hex');
