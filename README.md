@@ -37,12 +37,12 @@ nodeWeixinJssdk.prepare(app, url, function(error, data) {
 
 ## License
 
-MIT © [JSSDKCN](blog.3gcnbeta.com)
+MIT © [node-weixin](blog.3gcnbeta.com)
 
 
 [npm-image]: https://badge.fury.io/js/node-weixin-jssdk.svg
 [npm-url]: https://npmjs.org/package/node-weixin-jssdk
-[travis-image]: https://travis-ci.org/JSSDKCN/node-weixin-jssdk.svg?branch=master
-[travis-url]: https://travis-ci.org/JSSDKCN/node-weixin-jssdk
-[daviddm-image]: https://david-dm.org/JSSDKCN/node-weixin-jssdk.svg?theme=shields.io
-[daviddm-url]: https://david-dm.org/JSSDKCN/node-weixin-jssdk
+[travis-image]: https://travis-ci.org/node-weixin/node-weixin-jssdk.svg?branch=master
+[travis-url]: https://travis-ci.org/node-weixin/node-weixin-jssdk
+[daviddm-image]: https://david-dm.org/node-weixin/node-weixin-jssdk.svg?theme=shields.io
+[daviddm-url]: https://david-dm.org/node-weixin/node-weixin-jssdk
