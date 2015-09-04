@@ -14,9 +14,9 @@ $ npm install --save node-weixin-jssdk
 
 ```js
 
-module.exports = jssdk;
-
 var config = require('node-weixin-config');
+var auth = require('node-weixin-auth');
+var nodeWeixinJssdk = require('node-weixin-jssdk').create();
 
 var app = {
   id: process.env.APP_ID,
@@ -26,12 +26,11 @@ var app = {
 
 var url = 'http://wx.domain.com/jssdk';
 config.app.init(app);
-nodeWeixinJssdk.prepare(config.app, url, function(error, data) {
+nodeWeixinJssdk.prepare(app, url, function(error, data) {
   //data.appId
   //data.signature
   //data.noneStr
   //data.timestamp
-  done();
 });
 ```
 

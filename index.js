@@ -1,28 +1,31 @@
 'use strict';
 var restful = require('node-weixin-request');
-var auth = require('node-weixin-auth');
 var util = require('node-weixin-util');
-
 var crypto = require('crypto');
 var baseUrl = 'https://api.weixin.qq.com/cgi-bin/ticket/';
 
-var ticket = null;
+var _ = require("lodash");
 
-//Last time got a token
-var lastTime = null;
+function JSSDK() {
+}
 var jssdk = {
+  ticket: null,
+  //Last time got a token
+  lastTime: null,
   TICKET_EXP: 7200 * 1000,
-  passed: false,  //For test only
+  passed: false, //For test only
   //for real use
   /**
    * Prepare a config for jssdk to be enabled in weixin browser
+   * @param auth
    * @param app
    * @param url
    * @param cb
    */
-  prepare: function(app, url, cb) {
+  prepare: function (auth, app, url, cb) {
+    var self = this;
     auth.determine(app, function () {
-      jssdk.signify(app, url, function (error, json) {
+      self.signify(auth, app, url, function (error, json) {
         if (!error && !json.errcode) {
           cb(false, {
             appId: app.id,
@@ -36,19 +39,20 @@ var jssdk = {
       });
     });
   },
-
   /**
    * Get config
    *
+   * @param auth
    * @param app
    * @param url
    * @param cb
    */
-  signify: function (app, url, cb) {
-    jssdk.getTicket(app, function (error, ticket) {
+  signify: function (auth, app, url, cb) {
+    var self = this;
+    this.getTicket(auth, app, function (error, ticket) {
       if (!error) {
-        var config = jssdk.generate(ticket, url);
-        var signature = jssdk.sign(config);
+        var config = self.generate(ticket, url);
+        var signature = self.sign(config);
         config.signature = signature;
         cb(false, config);
       } else {
@@ -56,32 +60,31 @@ var jssdk = {
       }
     });
   },
-  getTicket: function (app, cb) {
-    jssdk.passed = false;
+  getTicket: function (auth, app, cb) {
+    this.passed = false;
     var now = new Date().getTime();
-
-    if (lastTime && (now - lastTime < jssdk.TICKET_EXP)) {
-      jssdk.passed = true;
-      cb(false, ticket);
+    if (this.lastTime && (now - this.lastTime < this.TICKET_EXP)) {
+      this.passed = true;
+      cb(false, this.ticket);
       return;
     }
-    lastTime = now;
+    this.lastTime = now;
     var params = {
       type: 'jsapi',
       access_token: auth.accessToken
     };
     var url = baseUrl + 'getticket?' + util.toParam(params);
+    var self = this;
     restful.request(url, null, function (error, json) {
       if (json.errcode === 0) {
-        ticket = json.ticket;
+        self.ticket = json.ticket;
         cb(false, json.ticket);
       } else {
         cb(true);
       }
     });
   },
-
-  sign: function(config, type) {
+  sign: function (config, type) {
     var str = util.marshall(config);
     var sha1 = crypto.createHash(type || 'sha1');
     sha1.update(str);
@@ -98,7 +101,12 @@ var jssdk = {
       timestamp: timestamp,
       url: url
     };
+  },
+  create: function() {
+    return new JSSDK();
   }
 };
-module.exports = jssdk;
 
+
+_.extend(JSSDK.prototype, jssdk);
+module.exports = new JSSDK();
