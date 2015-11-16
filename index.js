@@ -4,16 +4,9 @@ var util = require('node-weixin-util');
 var crypto = require('crypto');
 var baseUrl = 'https://api.weixin.qq.com/cgi-bin/ticket/';
 
-var _ = require("lodash");
-
-function JSSDK() {
-}
 var jssdk = {
-  ticket: null,
   //Last time got a token
-  lastTime: null,
   TICKET_EXP: 7200 * 1000,
-  passed: false, //For test only
   //for real use
   /**
    * Prepare a config for jssdk to be enabled in weixin browser
@@ -22,10 +15,11 @@ var jssdk = {
    * @param url
    * @param cb
    */
-  prepare: function (auth, app, url, cb) {
+  prepare: function (app, auth, url, cb) {
     var self = this;
+    app.jssdk = app.jssdk || {};
     auth.determine(app, function () {
-      self.signify(auth, app, url, function (error, json) {
+      self.signify(app, auth, url, function (error, json) {
         if (!error && !json.errcode) {
           cb(false, {
             appId: app.id,
@@ -47,9 +41,9 @@ var jssdk = {
    * @param url
    * @param cb
    */
-  signify: function (auth, app, url, cb) {
+  signify: function (app, auth, url, cb) {
     var self = this;
-    this.getTicket(auth, app, function (error, ticket) {
+    this.getTicket(app, auth, function (error, ticket) {
       if (!error) {
         var config = self.generate(ticket, url);
         var signature = self.sign(config);
@@ -60,24 +54,23 @@ var jssdk = {
       }
     });
   },
-  getTicket: function (auth, app, cb) {
-    this.passed = false;
+  getTicket: function (app, auth, cb) {
+    app.jssdk.passed = false;
     var now = new Date().getTime();
-    if (this.lastTime && (now - this.lastTime < this.TICKET_EXP)) {
-      this.passed = true;
-      cb(false, this.ticket);
+    if (app.jssdk.lastTime && (now - app.jssdk.lastTime < this.TICKET_EXP)) {
+      app.jssdk.passed = true;
+      cb(false, app.jssdk.ticket);
       return;
     }
-    this.lastTime = now;
+    app.jssdk.lastTime = now;
     var params = {
       type: 'jsapi',
-      access_token: auth.accessToken
+      access_token: app.auth.accessToken
     };
     var url = baseUrl + 'getticket?' + util.toParam(params);
-    var self = this;
     restful.request(url, null, function (error, json) {
       if (json.errcode === 0) {
-        self.ticket = json.ticket;
+        app.jssdk.ticket = json.ticket;
         cb(false, json.ticket);
       } else {
         cb(true);
@@ -101,12 +94,8 @@ var jssdk = {
       timestamp: timestamp,
       url: url
     };
-  },
-  create: function() {
-    return new JSSDK();
   }
 };
 
 
-_.extend(JSSDK.prototype, jssdk);
-module.exports = new JSSDK();
+module.exports = jssdk;

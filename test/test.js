@@ -1,7 +1,11 @@
 'use strict';
 var assert = require('assert');
-var nodeWeixinJssdk = require('../').create();
-
+var nodeWeixinJssdk = require('../');
+var app = {
+  id: process.env.APP_ID,
+  secret: process.env.APP_SECRET,
+  token: process.env.APP_TOKEN
+};
 
 
 describe('node-weixin-jssdk node module', function () {
@@ -9,15 +13,9 @@ describe('node-weixin-jssdk node module', function () {
     var config = require('node-weixin-config');
     var auth = require('node-weixin-auth');
 
-    var app = {
-      id: process.env.APP_ID,
-      secret: process.env.APP_SECRET,
-      token: process.env.APP_TOKEN
-    };
-
     var url = 'http://wx.t1bao.com/pay';
     config.app.init(app);
-    nodeWeixinJssdk.prepare(auth, app, url, function(error, data) {
+    nodeWeixinJssdk.prepare(app, auth, url, function(error, data) {
       assert.equal(true, !error);
       assert.equal(true, data.appId === app.id);
       assert.equal(true, data.signature.length > 1);
