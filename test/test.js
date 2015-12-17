@@ -22,7 +22,7 @@ describe('node-weixin-jssdk node module', function () {
 
     nodeWeixinJssdk.prepare(app, auth, url, function(error, data) {
       assert.equal(true, !error);
-      assert.equal(true, app.jssdk.passed === false);
+      assert.equal(true, app.__jssdk.passed === false);
       assert.equal(true, data.appId === app.id);
       assert.equal(true, data.signature.length > 1);
       assert.equal(true, data.nonceStr.length > 1);
@@ -34,7 +34,7 @@ describe('node-weixin-jssdk node module', function () {
   it('should be able to get jsapi_ticket', function (done) {
     nodeWeixinJssdk.prepare(app, auth, url, function(error, data) {
       assert.equal(true, !error);
-      assert.equal(true, app.jssdk.passed === true);
+      assert.equal(true, app.__jssdk.passed === true);
       assert.equal(true, data.appId === app.id);
       assert.equal(true, data.signature.length > 1);
       assert.equal(true, data.nonceStr.length > 1);

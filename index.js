@@ -17,7 +17,7 @@ var jssdk = {
    */
   prepare: function (app, auth, url, cb) {
     var self = this;
-    app.jssdk = app.jssdk || {};
+    app.__jssdk = app.__jssdk || {};
     auth.determine(app, function () {
       self.signify(app, auth, url, function (error, json) {
         if (!error && !json.errcode) {
@@ -55,14 +55,14 @@ var jssdk = {
     });
   },
   getTicket: function (app, auth, cb) {
-    app.jssdk.passed = false;
+    app.__jssdk.passed = false;
     var now = new Date().getTime();
-    if (app.jssdk.lastTime && (now - app.jssdk.lastTime < this.TICKET_EXP)) {
-      app.jssdk.passed = true;
-      cb(false, app.jssdk.ticket);
+    if (app.__jssdk.lastTime && (now - app.__jssdk.lastTime < this.TICKET_EXP)) {
+      app.__jssdk.passed = true;
+      cb(false, app.__jssdk.ticket);
       return;
     }
-    app.jssdk.lastTime = now;
+    app.__jssdk.lastTime = now;
     var params = {
       type: 'jsapi',
       access_token: app.auth.accessToken
@@ -70,7 +70,8 @@ var jssdk = {
     var url = baseUrl + 'getticket?' + util.toParam(params);
     restful.request(url, null, function (error, json) {
       if (json.errcode === 0) {
-        app.jssdk.ticket = json.ticket;
+        app.__jssdk.ticket = json.ticket;
+
         cb(false, json.ticket);
       } else {
         cb(true);
