@@ -3,7 +3,6 @@ var restful = require('node-weixin-request');
 var util = require('node-weixin-util');
 var auth = require('node-weixin-auth');
 var settings = require('node-weixin-settings');
-var assert = require('assert');
 
 var crypto = require('crypto');
 var baseUrl = 'https://api.weixin.qq.com/cgi-bin/ticket/';
@@ -58,36 +57,43 @@ module.exports = {
     });
   },
   getTicket: function (app, cb) {
+    var self = this;
 
-    var jssdk = settings.get(app.id, 'jssdk');
-    if (!jssdk) {
-      jssdk = {};
-    }
-    jssdk.passed = false;
-    var now = new Date().getTime();
-    if (jssdk.lastTime && (now - jssdk.lastTime < this.TICKET_EXP)) {
-      jssdk.passed = true;
-      cb(false, jssdk.ticket);
-      return;
-    }
-    jssdk.lastTime = now;
-    var authData = settings.get(app.id, 'auth');
-    var params = {
-      type: 'jsapi',
-      access_token: authData.accessToken
-    };
-    settings.set(app.id, 'jssdk', jssdk);
-    var url = baseUrl + 'getticket?' + util.toParam(params);
-    restful.request(url, null, function (error, json) {
-      if (json.errcode === 0) {
-        jssdk.ticket = json.ticket;
-        settings.set(app.id, 'jssdk', jssdk);
-        cb(false, json.ticket);
-      } else {
-        console.error(json);
-        cb(true);
+    settings.get(app.id, 'jssdk', function (jssdk) {
+      if (!jssdk) {
+        jssdk = {};
       }
+      jssdk.passed = false;
+      var now = new Date().getTime();
+      if (jssdk.lastTime && (now - jssdk.lastTime < self.TICKET_EXP)) {
+        jssdk.passed = true;
+        cb(false, jssdk.ticket);
+        return;
+      }
+      jssdk.lastTime = now;
+      settings.get(app.id, 'auth', function (authData) {
+        var params = {
+          type: 'jsapi',
+          access_token: authData.accessToken
+        };
+        settings.set(app.id, 'jssdk', jssdk, function () {
+          var url = baseUrl + 'getticket?' + util.toParam(params);
+          restful.request(url, null, function (error, json) {
+            if (json.errcode === 0) {
+              jssdk.ticket = json.ticket;
+              settings.set(app.id, 'jssdk', jssdk, function () {
+                cb(false, json.ticket);
+              });
+            } else {
+              console.error(json);
+              cb(true);
+            }
+          });
+        });
+      });
     });
+
+
   },
   sign: function (config, type) {
     var str = util.marshall(config);
