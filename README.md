@@ -37,8 +37,13 @@ module.exports = {
     }
     //2.获取ID
     var id = router.getId(req);
+    //3. 设置 app 
+    var settings.set(id, 'app', app, function() {
+    });
     //3.获取app,必须初始化时保存或者已经提前保存到settings里面
-    var app = settings.get(id, 'app');
+    settings.get(id, 'app', function(app) {
+    });
+    
     //4. 初始化jssdk匹配
     weixin.jssdk.prepare(app, url, function() {
     });
