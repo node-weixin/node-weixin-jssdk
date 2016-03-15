@@ -1,4 +1,4 @@
-#  [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][daviddm-image]][daviddm-url]  [![Coveralls Status][coveralls-image]][coveralls-url]
+# node-weixin-jssdk [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][daviddm-image]][daviddm-url] [![Coverage percentage][coveralls-image]][coveralls-url]
 
 > JSSDK Functions for weixin
 
@@ -46,10 +46,9 @@ module.exports = {
 };
 ```
 
-
 ## License
 
-MIT © [node-weixin](blog.3gcnbeta.com)
+Apache-2.0 © [calidion](calidion.github.io)
 
 
 [npm-image]: https://badge.fury.io/js/node-weixin-jssdk.svg
@@ -58,5 +57,5 @@ MIT © [node-weixin](blog.3gcnbeta.com)
 [travis-url]: https://travis-ci.org/node-weixin/node-weixin-jssdk
 [daviddm-image]: https://david-dm.org/node-weixin/node-weixin-jssdk.svg?theme=shields.io
 [daviddm-url]: https://david-dm.org/node-weixin/node-weixin-jssdk
-[coveralls-image]: https://coveralls.io/repos/node-weixin/node-weixin-jssdk/badge.svg?branch=master&service=github
-[coveralls-url]: https://coveralls.io/github/node-weixin/node-weixin-jssdk?branch=master
+[coveralls-image]: https://coveralls.io/repos/node-weixin/node-weixin-jssdk/badge.svg
+[coveralls-url]: https://coveralls.io/r/node-weixin/node-weixin-jssdk
