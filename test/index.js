@@ -16,7 +16,7 @@ var url = 'http://wx.t1bao.com/pay';
 
 describe('node-weixin-jssdk node module', function () {
   it('should be able to get jsapi_ticket', function (done) {
-    nodeWeixinJssdk.prepare(app, url, function (error, data) {
+    nodeWeixinJssdk.prepare(settings, app, url, function (error, data) {
       settings.get(app.id, 'jssdk', function (jssdk) {
         assert.equal(true, !error);
         assert.equal(true, jssdk.passed === false);
@@ -30,7 +30,7 @@ describe('node-weixin-jssdk node module', function () {
   });
 
   it('should be able to get jsapi_ticket', function (done) {
-    nodeWeixinJssdk.prepare(app, url, function (error, data) {
+    nodeWeixinJssdk.prepare(settings, app, url, function (error, data) {
       settings.get(app.id, 'jssdk', function (jssdk) {
         assert.equal(true, !error);
         assert.equal(true, jssdk.passed === true);
@@ -44,7 +44,7 @@ describe('node-weixin-jssdk node module', function () {
   });
 
   it('should be fail to get jsapi_ticket', function (done) {
-    nodeWeixinJssdk.prepare({}, url, function (error) {
+    nodeWeixinJssdk.prepare(settings, {}, url, function (error) {
       assert.equal(true, error);
       done();
     });

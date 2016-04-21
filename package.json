@@ -1,6 +1,6 @@
 {
   "name": "node-weixin-jssdk",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "",
   "homepage": "",
   "author": {
@@ -16,16 +16,17 @@
     ""
   ],
   "devDependencies": {
-    "node-weixin-config": "^0.3.0",
     "eslint-config-xo-space": "^0.7.0",
     "gulp": "^3.9.0",
+    "gulp-coveralls": "^0.1.0",
     "gulp-eslint": "^1.0.0",
     "gulp-exclude-gitignore": "^1.0.0",
     "gulp-istanbul": "^0.10.3",
     "gulp-mocha": "^2.0.0",
-    "gulp-plumber": "^1.0.0",
     "gulp-nsp": "^2.1.0",
-    "gulp-coveralls": "^0.1.0"
+    "gulp-plumber": "^1.0.0",
+    "node-weixin-config": "^0.3.0",
+    "node-weixin-settings": "^0.2.0"
   },
   "eslintConfig": {
     "extends": "xo-space",
@@ -40,9 +41,8 @@
   },
   "license": "Apache-2.0",
   "dependencies": {
-    "node-weixin-auth": "^0.5.0",
+    "node-weixin-auth": "^0.6.0",
     "node-weixin-request": "^0.4.0",
-    "node-weixin-settings": "^0.2.0",
     "node-weixin-util": "^0.3.1"
   }
 }
